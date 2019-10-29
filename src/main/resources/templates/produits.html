@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layout">
+<head>
+<meta charset="utf-8">
+<title>Produits</title>
+<link rel="stylesheet" type="text/css" 
+href="../static/css/bootstrap.min.css" 
+th:href="@{css/bootstrap.min.css}"/> 
+
+<link rel="stylesheet" type="text/css" 
+href="../static/css/style.css" 
+th:href="@{css/style.css}"/>
+<!-- ici ca marche pas solution soit supprimer ../static/ or declare th:href=*** -->
+</head>
+<body>
+	
+<div layout:fragment="content">
+<h3 class="container">Liste des produits avec champ de recherche :</h3>
+<div class="container">
+<form th:action="@{index}" method="get">
+   <label>Mot Clé : </label>
+   <input type="text" name="motCle" th:value="${motCle}"/>
+   <button claas="btn btn-primary">Chercher</button>
+
+</form>
+</div>
+<div class="container">
+<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th><th>Désignation</th><th>Prix</th><th>Quantité</th>
+			</tr>
+		</thead>
+        <tbody>
+           <tr th:each="p:${listProduits}">
+             <td th:text="${p.id}"></td>
+             <td th:text="${p.designation}"></td>
+             <td th:text="${p.prix}"></td>
+             <td th:text="${p.quantite}"></td>
+             <td><a onclick="return confirm('Are you sure?')" th:href="@{delete(id=${p.id},page=${pagecourante},size=${size},motCle=${motCle})}">Delete</a></td>
+           </tr>
+        
+        
+        </tbody>
+	</table>
+	
+	</div>
+	<div class="container"> 
+	   <ul class="nav nav-pills">
+	     <li th:class="${pagecourante} == ${status.index}?'active':''" th:each="pa,status:${pages}" >
+	     <a th:href="@{index(page=${status.index},size=${size},motCle=${motCle})}" th:text="${status.index}"></a>
+	     </li>  
+	  </ul>
+	</div>
+	</div>
+</body>
+</html>
